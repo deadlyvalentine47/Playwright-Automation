@@ -1,0 +1,14 @@
+[
+  {
+    "testCaseId": "positive login",
+    "userName": "user1@example.com",
+    "password": "password1",
+    "role": "admin"
+  },
+  {
+    "testCaseId": "negative login",
+    "userName": "user2@example.com",
+    "password": "password2",
+    "role": "user"
+  }
+]
