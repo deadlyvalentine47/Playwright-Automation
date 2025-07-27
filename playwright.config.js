@@ -11,10 +11,13 @@ module.exports = defineConfig({
     timeout: 5000
   },
   fullyParallel: true,
-  reporter: [['html', { outputFolder: 'reports', open: 'never' }]],
+  reporter: [
+    ['html', { outputFolder: 'reports', open: 'never' }],
+    // ['junit', { outputFile: 'test-results/junit.xml' }]
+  ],
   use: {
     baseURL: process.env.SWIGGY_URL,
-    trace: 'on-first-retry',
+    trace: 'retain-on-failure',
     screenshot: 'on', // Take screenshot on pass, fail, and via code
     video: 'retain-on-failure',
   },
@@ -23,14 +26,17 @@ module.exports = defineConfig({
       name: 'Chromium',
       use: { ...devices['Desktop Chrome'] },
     },
-    {
-      name: 'Firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
+    // {
+    //   name: 'Firefox',
+    //   use: { ...devices['Desktop Firefox'] },
+    // },
     // {
     //   name: 'WebKit',
     //   use: { ...devices['Desktop Safari'] },
     // },
   ],
   outputDir: 'screenshots', // For artifacts like screenshots
+  // CI/CD specific settings
+  workers: process.env.CI ? 1 : undefined,
+  retries: process.env.CI ? 2 : 0,
 });

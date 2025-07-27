@@ -1,0 +1,81 @@
+stages:
+  - install
+  - lint
+  - test
+  - report
+
+variables:
+  NODE_VERSION: "18"
+
+cache:
+  paths:
+    - node_modules/
+
+install_dependencies:
+  stage: install
+  image: node:${NODE_VERSION}
+  script:
+    - npm ci
+    - npx playwright install --with-deps
+  artifacts:
+    paths:
+      - node_modules/
+    expire_in: 1 hour
+
+lint_code:
+  stage: lint
+  image: node:${NODE_VERSION}
+  script:
+    - npm run lint
+  dependencies:
+    - install_dependencies
+
+test_chromium:
+  stage: test
+  image: mcr.microsoft.com/playwright:v1.54.1-focal
+  script:
+    - npm ci
+    - npx playwright test --project=Chromium
+  artifacts:
+    when: always
+    paths:
+      - screenshots/
+      - reports/
+      - playwright-report/
+    expire_in: 1 week
+  dependencies:
+    - install_dependencies
+
+test_firefox:
+  stage: test
+  image: mcr.microsoft.com/playwright:v1.54.1-focal
+  script:
+    - npm ci
+    - npx playwright test --project=Firefox
+  artifacts:
+    when: always
+    paths:
+      - screenshots/
+      - reports/
+      - playwright-report/
+    expire_in: 1 week
+  dependencies:
+    - install_dependencies
+
+publish_reports:
+  stage: report
+  image: node:${NODE_VERSION}
+  script:
+    - echo "Publishing test reports..."
+  artifacts:
+    when: always
+    paths:
+      - screenshots/
+      - reports/
+      - playwright-report/
+    reports:
+      junit: test-results/junit.xml
+    expire_in: 1 week
+  dependencies:
+    - test_chromium
+    - test_firefox 
