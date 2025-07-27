@@ -4,6 +4,9 @@
   "main": "index.js",
   "scripts": {
     "test": "npx playwright test",
+    "test:qa": "cross-env ENV_FILE=.env.qa npx playwright test",
+    "test:stage": "cross-env ENV_FILE=.env.stage npx playwright test",
+    "test:prod": "cross-env ENV_FILE=.env npx playwright test",
     "test:login": "npx playwright test tests/swiggy-login.spec.js",
     "test:login-suite": "npx playwright test -g \"Swiggy Login Suite\"",
     "test:all-swiggy": "npx playwright test tests/swiggy-*.spec.js",
@@ -24,6 +27,7 @@
     "@eslint/json": "^0.13.1",
     "@eslint/markdown": "^7.1.0",
     "@playwright/test": "^1.54.1",
+    "cross-env": "^7.0.3",
     "dotenv": "^17.2.0",
     "eslint": "^9.31.0",
     "globals": "^16.3.0",

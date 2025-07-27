@@ -1,5 +1,4 @@
 .cursorindexingignore
-.env
 .specstory/
 Chat history.md
 node_modules/

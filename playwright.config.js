@@ -2,7 +2,7 @@
 const { defineConfig, devices } = require('@playwright/test');
 // import { defineConfig, devices } from '@playwright/test'
 
-require('dotenv').config();
+require('dotenv').config({ path: process.env.ENV_FILE || '.env' });
 
 module.exports = defineConfig({
   testDir: './tests',
